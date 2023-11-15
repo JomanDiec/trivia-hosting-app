@@ -1,19 +1,34 @@
+import { useState } from 'react';
 import { db } from '../firebaseConfig.js';
 import { doc, setDoc } from "firebase/firestore";
 
 function TeamRegistration() {
-  // Add a new document in collection "cities"
+  // const [teamData, setTeamData] = useState({
+  //   teamName: "alpha team",
+  //   teamMembers: ["alpha", "beta", "gamma"],
+  //   teamScore: 0
+  // });
+  // const handleChange = () => {
+  //   console.log("Hello");
+  //   setTeamData({
+  //     teamName: "Hello",
+  //     teamMembers: [],
+  //     teamScore: 0
+  //   });
+
+  // }
   const button = async () => {
-    await setDoc(doc(db, "cities", "LA"), {
-      name: "Los Angeles",
-      state: "CA",
-      country: "USA"
+    await setDoc(doc(db, "teams", "teamName"), {
+      teamName: "teamName",
+      teamMembers: "teamMembers",
+      teamScore: "teamScore"
     });
   }
 
   return (
     <>
       <h1>Team Registration</h1>
+      {/* <input type="text" onChange={handleChange}/> */}
       <button onClick={button}>Click me</button>
     </>
   );
