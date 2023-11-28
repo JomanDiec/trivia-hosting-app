@@ -18,8 +18,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
     <BrowserRouter basename="/">
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/teamRegistration" element={<TeamRegistration />} />
+        {/* <Route path="/" element={<App />} /> */}
+        <Route path="/" element={<TeamRegistration />} />
         <Route path="/teamSubmission" element={<TeamSubmission />} />
         <Route path="/leaderBoard" element={<LeaderBoard />} />
         <Route path="/quizmasterSubmission" element={<QuizmasterSubmission />} />
