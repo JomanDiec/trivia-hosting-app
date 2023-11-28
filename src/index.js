@@ -7,9 +7,12 @@ import App from "./App";
 import TeamRegistration from "./pages/teamRegistration";
 import TeamSubmission from "./pages/teamSubmission";
 import LeaderBoard from "./pages/leaderBoard";
-import AdminRegistration from "./pages/adminRegistration";
-import AdminSubmission from "./pages/adminSubmission";
+import QuizmasterSubmission from "./pages/quizmasterSubmission";
+import AdminSubmission from "./pages/quizmasterAdmin";
+import QuizCreation from "./pages/quizCreation";
+import QuizmasterLogin from "./pages/quizmasterLogin";
 import Functions from "./pages/functions";
+import Navigation from "./pages/navigation";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -20,9 +23,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/teamRegistration" element={<TeamRegistration />} />
         <Route path="/teamSubmission" element={<TeamSubmission />} />
         <Route path="/leaderBoard" element={<LeaderBoard />} />
-        <Route path="/adminRegistration" element={<AdminRegistration />} />
+        <Route path="/quizmasterSubmission" element={<QuizmasterSubmission />} />
         <Route path="/adminSubmission" element={<AdminSubmission />} />
+        <Route path="/quizCreation" element={<QuizCreation />} />
+        <Route path="/quizmasterLogin" element={<QuizmasterLogin />} />
         <Route path="/functions" element={<Functions />} />
+        <Route path="/navigation" element={<Navigation />} />
       </Routes>
     </BrowserRouter>
   // </React.StrictMode>

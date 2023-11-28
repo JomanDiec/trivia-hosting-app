@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { db } from '../firebaseConfig.js';
 import { doc, setDoc } from "firebase/firestore";
+import Navigation from './navigation.js';
 
 function TeamRegistration() {
   // const [teamData, setTeamData] = useState({
@@ -30,6 +31,8 @@ function TeamRegistration() {
       <h1>Team Registration</h1>
       {/* <input type="text" onChange={handleChange}/> */}
       <button onClick={button}>Click me</button>
+      <br/>
+      <Navigation />
     </>
   );
 }

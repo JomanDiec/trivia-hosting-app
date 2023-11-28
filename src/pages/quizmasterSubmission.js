@@ -1,13 +1,13 @@
 import Navigation from './navigation.js';
 
-function TeamSubmission() {
+function quizmasterSubmission() {
     return (
       <>
-          <h1>Team Submission</h1>
+          <h1>Quizmaster Submission</h1>
           <br/>
           <Navigation />
       </>
     );
   }
   
-  export default TeamSubmission;
+  export default quizmasterSubmission;
