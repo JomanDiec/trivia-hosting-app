@@ -8,28 +8,16 @@ function TeamRegistration() {
     teamName: "",
     prizeElgible:"competitive",
     hasQuizmaster:"no",
-    // teamMembers: ["alpha", "beta", "gamma"],
-    // teamScore: 0
   });
+
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
     const {name, value } = event.target;
     setTeamData(prevState => ({
       ...prevState,
       [name]: value,
-      // teamMembers: [],
-      // teamScore: 0
     }));
   }
-
-  // const [state, setState] = useState({ fName: "", lName: "" });
-  // const handleChange = e => {
-  //     const { name, value } = e.target;
-  //     setState(prevState => ({
-  //         ...prevState,
-  //         [name]: value
-  //     }));
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -41,7 +29,6 @@ function TeamRegistration() {
     })
     console.log("Document written with ID: ", docRef.id);
   }
-
 
   return (
     <>
