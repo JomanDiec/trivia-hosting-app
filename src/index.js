@@ -12,7 +12,8 @@ import AdminSubmission from "./pages/quizmasterAdmin";
 import QuizCreation from "./pages/quizCreation";
 import QuizmasterLogin from "./pages/quizmasterLogin";
 import Functions from "./pages/functions";
-
+import PageTest from "./pages/pageTest";
+import FormTest from "./pages/formTest";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -27,6 +28,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/quizCreation" element={<QuizCreation />} />
         <Route path="/quizmasterLogin" element={<QuizmasterLogin />} />
         <Route path="/functions" element={<Functions />} />
+        <Route path="/pageTest" element={<PageTest />} />
+        <Route path="/formTest" element={<FormTest />} />
       </Routes>
     </BrowserRouter>
   // </React.StrictMode>
