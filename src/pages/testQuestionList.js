@@ -1,6 +1,7 @@
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
+import '../App.css'
 
 function TestQuestionList() {
     const [data, setData] = useState([]);
@@ -19,11 +20,13 @@ function TestQuestionList() {
 
         return () => unsub(); // Cleanup on component unmount
     }, [])
+
     return (
         <div>
+    
             <h1>Test Question List</h1>
             {data.map(item => (
-                    <div key={item.id}>
+                    <div key={item.id} className={`${item.isActive ? "active":"hidden"}`}>
                         {item.question}
                         {/* {item.id} */}
                         {item.isActive ? <button>Active</button> : <button>Inactive</button>}

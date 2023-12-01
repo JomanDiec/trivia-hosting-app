@@ -17,6 +17,8 @@ import FormTest from "./pages/formTest";
 import OnSnapshot from "./pages/onSnapshot";
 import TestAdmin01 from "./pages/testAdmin01";
 import TestQuestionList from "./pages/testQuestionList";
+import TestTeamReg from "./pages/testTeamReg";
+import TestAfterTeamReg from "./pages/testAfterTeamReg";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -35,7 +37,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/formTest" element={<FormTest />} />
         <Route path="/onSnapshot" element={<OnSnapshot />} />
         <Route path="/testAdmin01" element={<TestAdmin01 />} />
-        <Route path ="/testQuestionList" element={<TestQuestionList />} />
+        <Route path="/testQuestionList" element={<TestQuestionList />} />
+        <Route path='/testTeamReg' element={<TestTeamReg />} />
+        <Route path="/testAfterTeamReg/:id" element={<TestAfterTeamReg />} />
       </Routes>
     </BrowserRouter>
   // </React.StrictMode>
