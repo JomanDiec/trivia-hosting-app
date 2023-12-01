@@ -1,19 +1,28 @@
-function Navigation(){
-    return(
+import * as React from "react";
+import { Link } from "react-router-dom";
+
+function Navigation() {
+    return (
         <>
-        <a href="/">
-      	    Team Registration
-    	</a>
-        <br/>
-        <a href="/teamSubmission">
-            Team Submission
-        </a>
-        <br/>
-        <a href="/quizmasterSubmission">
-            Quizmaster Submission
-        </a>
+            <div>
+                <nav className="navbar" role="navigation" aria-label="main navigation">
+                    <div className="navbar-menu">
+                        <Link to="/" className="navbar-item">
+                            Team Registration
+                        </Link>
+                        <br />
+                        <Link to="/teamSubmission" className="navbar-item">
+                            Team Submission
+                        </Link>
+                        <br />
+                        <Link to="/quizmasterSubmission" className="navbar-item">
+                            Quizmaster Submission
+                        </Link>
+                    </div>
+                </nav>
+            </div>
         </>
-        
+
     );
 }
 
