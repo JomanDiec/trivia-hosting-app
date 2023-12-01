@@ -15,6 +15,8 @@ import Functions from "./pages/functions";
 import PageTest from "./pages/pageTest";
 import FormTest from "./pages/formTest";
 import OnSnapshot from "./pages/onSnapshot";
+import TestAdmin01 from "./pages/testAdmin01";
+import TestQuestionList from "./pages/testQuestionList";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -32,6 +34,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/pageTest" element={<PageTest />} />
         <Route path="/formTest" element={<FormTest />} />
         <Route path="/onSnapshot" element={<OnSnapshot />} />
+        <Route path="/testAdmin01" element={<TestAdmin01 />} />
+        <Route path ="/testQuestionList" element={<TestQuestionList />} />
       </Routes>
     </BrowserRouter>
   // </React.StrictMode>

@@ -19,7 +19,7 @@ function TeamSubmission() {
               question: doc.data().question,
               answer: doc.data().answer
           }
-          setUserData(userData => [...userData, data]);
+          // setUserData(userData => [...userData, data]);
       });
   }, []);
 
