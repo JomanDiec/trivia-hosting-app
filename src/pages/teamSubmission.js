@@ -12,14 +12,14 @@ function TeamSubmission() {
       const q = query(collection(db, "questions"));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
-          console.log(`${doc.id} => ${doc.data().question}`);
+          console.log(`${doc.data().number} => ${doc.data().question}`);
           let data = {
               id: doc.id,
               number: doc.data().number,
               question: doc.data().question,
               answer: doc.data().answer
           }
-          setUserData(userData => [...userData, data]);
+          setQuestionData(questionData => [...questionData, data]);
       });
   }, []);
 
@@ -39,7 +39,19 @@ function TeamSubmission() {
           <h1><b>Your Team's Room number is {} (share this with your teammates)</b></h1>
           <br/>
           <br/>
-          <h2>Question {}</h2>
+          {questionData.map((question)=> (
+            <div key={question.number}>
+              <h2><b>Question {question.number}:</b></h2>
+                <form>
+                  <p>{question.question}</p>
+                  <label for="teamAnswer{question.number}">Answer: </label>
+                  <input type="text" name="teamAnswer{question.number}" id="teamAnswer{question.number}" placeholder="Enter Your answer" />
+                  <button type="submit">Submit</button>
+                </form>
+              <h2><b>Answer: {question.answer}</b></h2>
+            <br/>
+            </div>
+          ))} 
           <p></p>
       </>
     );
