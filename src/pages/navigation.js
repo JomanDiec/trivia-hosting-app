@@ -1,7 +1,7 @@
 function Navigation(){
     return(
         <>
-        <a href="/teamRegistration">
+        <a href="/">
       	    Team Registration
     	</a>
         <br/>
