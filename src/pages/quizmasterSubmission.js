@@ -1,6 +1,63 @@
-import { Link } from "react-router-dom";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc} from "firebase/firestore";
+import { useCallback, useEffect, useState } from "react";
+import { db } from "../firebaseConfig";
+import Navigation from './navigation.js';
+import { useParams, Link } from "react-router-dom";
 
-function quizmasterSubmission() {
+function QuizmasterSubmission() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+      console.log("useEffect>OnSnapshot")
+      const fetchData = async () => {
+          const snapshot = await getDocs(collection(db, "questions"));
+          const newData = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+          }));
+          console.log({ newData })
+          setData(newData);
+      }
+      fetchData();
+  }, [])
+  const toggleActive = async (id) => {
+      console.log(id)
+      // update firestore data with id
+      let item = data.find(item => item.id === id);
+      await updateDoc(doc(db, "questions", id), {
+          isActive: !item.isActive
+      });
+
+      setData( 
+          data
+          .map(item => item.id === id ? 
+              {...item, isActive: !item.isActive} : item)
+      )
+  }
+
+  const [questionData, setQuestionData] = useState([]);
+
+  const loadData = useCallback(async () => {
+    console.log("loadData")
+    const q = query(collection(db, "questions"),orderBy("number", "asc"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        console.log(`${doc.data().number} => ${doc.data().question}`);
+        let data = {
+            id: doc.id,
+            number: doc.data().number,
+            question: doc.data().question,
+            answer: doc.data().answer
+        }
+        setQuestionData(questionData => [...questionData, data]);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("useEffect running on quizmasterSubmission")
+    loadData();
+}, [loadData])
+
   return (
     <>
       <h1>Quizmaster Submission</h1>
@@ -33,15 +90,34 @@ function quizmasterSubmission() {
           <table>
             <thead>
               <tr>
-                <th style={{ paddingRight: '40px' }}>Question #</th>
-                <th style={{ paddingRight: '40px' }}>Display Question</th>
-                <th style={{ paddingRight: '40px' }}>Display Answer</th>
+                <th className="is-1" style={{ paddingRight: '40px',width:'50%' }}>Question #</th>
+                <th className="is-4" style={{ paddingRight: '40px' }}>Display Question</th>
+                <th className="is-4" style={{ paddingRight: '40px' }}>Display Answer</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><a href="/">Question1</a></td>
-                <td><button>On/Off</button></td>
+              
+                
+                {questionData.map((question)=> ( 
+                <>
+                <tr>
+                <td> 
+                <div key={question.number}>
+                  <a hre="/"><b>Question {question.number}:</b></a>
+                      <p align="left">{question.question}</p>
+                  <h2><b>Answer: {question.answer}</b></h2> {/*change to how it is displayed in questionlist.js */}
+                <br/>
+                </div>
+                </td>
+
+                <td>
+                  {question.isActive ?
+                  <button onClick={() => toggleActive(question.id)}>Off</button> :
+                  <button onClick={() => toggleActive(question.id)}>On</button>
+                  }
+                </td>
+                 
+
                 <td>
                   <div class="field">
                     <p class="control">
@@ -49,56 +125,15 @@ function quizmasterSubmission() {
                         <select>
                           <option selected>Hidden</option>
                           <option>Open submission</option>
+                          <option>Close submission</option>
+                          <option>Display Answer</option>
                         </select>
                       </span>
                     </p>
                   </div>
                 </td>
-              </tr>
-              <tr>
-                <td><a href="/">Question2</a></td>
-                <td><button>On/Off</button></td>
-                <td>
-                  <div class="field">
-                    <p class="control">
-                      <span class="select">
-                        <select>
-                          <option selected>Hidden</option>
-                          <option>Open submission</option>
-                        </select>
-                      </span>
-                    </p>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><a href="/">Question3</a></td>
-                <td><button>On/Off</button></td>
-                <td>
-                  <div class="field">
-                    <p class="control">
-                      <span class="select">
-                        <select>
-                          <option selected>Hidden</option>
-                          <option>Open submission</option>
-                        </select>
-                      </span>
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <p>
-            <small>
-              Did Adam have a belly button?
-            </small>
-            <br />
-            <b>
-              Correct Answer(s): Maybe
-            </b>
-          </p>
-          <table className="table is-bordered has-text-centered">
+                </tr>
+                <table className="table is-bordered has-text-centered">
             <thead>
               <tr>
                 <th style={{ paddingRight: '40px' }}>Team</th>
@@ -152,6 +187,21 @@ function quizmasterSubmission() {
               </tr>
             </tbody>
           </table>
+                </>
+                ))} 
+              
+              
+            </tbody>
+          </table>
+          <p>
+            <small>
+              Did Adam have a belly button?
+            </small>
+            <br />
+            <b>
+              Correct Answer(s): Maybe
+            </b>
+          </p>
         </div>
 
         <div className="handout">
@@ -462,4 +512,4 @@ function quizmasterSubmission() {
   );
 }
 
-export default quizmasterSubmission;
+export default QuizmasterSubmission;

@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc} from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc} from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 import Navigation from './navigation.js';
@@ -11,7 +11,23 @@ function TeamSubmission() {
   const [questionData, setQuestionData] = useState([]);
   const { id } = useParams();
   console.log("ID is: ", id);
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    console.log("useEffect>OnSnapshot")
+    const q = query(collection(db, "questions"));
+    const unsub = onSnapshot(q, (querySnapshot) => {
+        console.log({ querySnapshot })
+        const data = []
+        querySnapshot.forEach((doc) => {
+            data.push({ id: doc.id, ...doc.data() })
+        });
+        setData(data);
+    })
+
+    return () => unsub(); // Cleanup on component unmount
+  }, [])
+  
   useEffect(() => {
       console.log("useEffect - TestAfterTeamReg")
       const getTeamData = async () => {
@@ -86,7 +102,8 @@ function TeamSubmission() {
           <br/>
           <br/>
           {questionData.map((question)=> (
-            <div key={question.number}>
+            
+            <div key={question.number} className={`${question.isActive ? "active":"hidden"}`}>
               <h2><b>Question {question.number}:</b></h2>
                 <form onSubmit={(e)=>handleSubmit(e, question.id)}>
                   <p>{question.question}</p>
@@ -94,9 +111,17 @@ function TeamSubmission() {
                   <input type="text" name='answer' placeholder="Enter Your answer" onChange={handleChange} />
                   <button type="submit">Submit</button>
                 </form>
+              <>
+              {/* {teamData.map((team)=> (
+                <h2 key={team.teamName}><b>Your Answer: </b></h2> displays submitted answer and actual answer when quizmasterswitches answer display
+              ))}  */}
+              </>  
+              
               <h2 style={{display:'none'}}><b>Answer: {question.answer}</b></h2> {/*change to how it is displayed in questionlist.js */}
             <br/>
             </div>
+            
+            
           ))} 
           <p></p>
       </>
