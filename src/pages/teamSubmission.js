@@ -1,15 +1,37 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc} from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 import Navigation from './navigation.js';
+import { useParams } from "react-router-dom";
 
 function TeamSubmission() {
   const [teamData, setTeamData] = useState({
     teamName: "joman123",
-    question: "",
-    answer: ""
   });
   const [questionData, setQuestionData] = useState([]);
+  const { id } = useParams();
+  console.log("ID is: ", id);
+
+  useEffect(() => {
+      console.log("useEffect - TestAfterTeamReg")
+      const getTeamData = async () => {
+          await getDoc(doc(db, "trivia", id)).then((docData) => {
+              if (docData.exists()) {
+                  console.log("Document data:", docData.data());
+                  // add id to docData
+                  docData.data().id = docData.id;
+
+                  setTeamData(docData.data());
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+              }
+          }).catch((error) => {
+              console.log("Error getting document:", error);
+          });
+      }
+      getTeamData();
+      }, [])
 
   const loadData = useCallback(async () => {
       console.log("loadData")
@@ -38,18 +60,18 @@ function TeamSubmission() {
       ...prevState,
       [name]: value,
     }));
+    console.log(event.target.name, ' handlchange ', event.target.value)
   }
 
   const handleSubmit = async (event, questionId) => {
-    console.log(event, questionId)
+    console.log(id, "and", teamData.teamName)
     event.preventDefault()
-    console.log("Submitted!!", teamData)
-    const docRef = await addDoc(collection(db,"answers"),{
-      teamName: teamData.teamName,
-      question: questionId,
-      answer: teamData.answer,
+    const docRef = await updateDoc(doc(db,"trivia", id),{
+
+      [questionId]: teamData.answer,
     })
-    console.log("Document written with ID: ", docRef.id);
+    console.log("Submitted!!", id, "and ", teamData.answer-questionId)
+    console.log("Document written with ID: ", docRef);
   }
 
     return (
@@ -69,7 +91,7 @@ function TeamSubmission() {
                 <form onSubmit={(e)=>handleSubmit(e, question.id)}>
                   <p>{question.question}</p>
                   <label for="answer">Answer: </label>
-                  <input type="text" name="answer" placeholder="Enter Your answer" onChange={handleChange} />
+                  <input type="text" name='answer' placeholder="Enter Your answer" onChange={handleChange} />
                   <button type="submit">Submit</button>
                 </form>
               <h2 style={{display:'none'}}><b>Answer: {question.answer}</b></h2> {/*change to how it is displayed in questionlist.js */}

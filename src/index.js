@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         {/* <Route path="/" element={<App />} /> */}
         <Route path="/" element={<TeamRegistration />} />
-        <Route path="/teamSubmission" element={<TeamSubmission />} />
+        <Route path="/teamSubmission/:id" element={<TeamSubmission />} />
         <Route path="/leaderBoard" element={<LeaderBoard />} />
         <Route path="/quizmasterSubmission" element={<QuizmasterSubmission />} />
         <Route path="/adminSubmission" element={<AdminSubmission />} />
