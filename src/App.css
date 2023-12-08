@@ -38,8 +38,10 @@
 }
 
 .active {
-  background-color: green;
+  /* background-color: green; */
+  
 }
 .hidden {
-  background-color: red;
+  /* background-color: red; */
+  visibility:hidden
 }

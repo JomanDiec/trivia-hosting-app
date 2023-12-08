@@ -15,9 +15,9 @@ function TeamSubmission() {
 
   useEffect(() => {
     console.log("useEffect>OnSnapshot")
-    const q = query(collection(db, "questions"));
+    const q = query(collection(db, "questions"),orderBy("number", "asc"));
     const unsub = onSnapshot(q, (querySnapshot) => {
-        console.log({ querySnapshot })
+        console.log("query useeffect", { querySnapshot })
         const data = []
         querySnapshot.forEach((doc) => {
             data.push({ id: doc.id, ...doc.data() })
@@ -49,25 +49,25 @@ function TeamSubmission() {
       getTeamData();
       }, [])
 
-  const loadData = useCallback(async () => {
-      console.log("loadData")
-      const q = query(collection(db, "questions"),orderBy("number", "asc"));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-          console.log(`${doc.data().number} => ${doc.data().question}`);
-          let data = {
-              id: doc.id,
-              number: doc.data().number,
-              question: doc.data().question,
-              answer: doc.data().answer
-          }
-          setQuestionData(questionData => [...questionData, data]);
-      });
-  }, []);
+  // const loadData = useCallback(async () => {
+  //     console.log("loadData")
+  //     const q = query(collection(db, "questions"),orderBy("number", "asc"));
+  //     const querySnapshot = await getDocs(q);
+  //     querySnapshot.forEach((doc) => {
+  //         console.log(`${doc.data().number} => ${doc.data().question}`);
+  //         let data = {
+  //             id: doc.id,
+  //             number: doc.data().number,
+  //             question: doc.data().question,
+  //             answer: doc.data().answer
+  //         }
+  //         setQuestionData(questionData => [...questionData, data]);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-      loadData();
-  }, [loadData])
+  // useEffect(() => {
+  //     loadData();
+  // }, [loadData])
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -101,7 +101,7 @@ function TeamSubmission() {
           <h1><b>Your Team's Room number is {} (share this with your teammates)</b></h1>
           <br/>
           <br/>
-          {questionData.map((question)=> (
+          {data.map((question)=> (
             
             <div key={question.number} className={`${question.isActive ? "active":"hidden"}`}>
               <h2><b>Question {question.number}:</b></h2>
