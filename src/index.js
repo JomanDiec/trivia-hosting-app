@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import TeamRegistration from "./pages/teamRegistration";
+import Teams from "./pages/teams";
 import TeamSubmission from "./pages/teamSubmission";
 import LeaderBoard from "./pages/leaderBoard";
 import QuizmasterSubmission from "./pages/quizmasterSubmission";
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         {/* <Route path="/" element={<App />} /> */}
         <Route path="/" element={<TeamRegistration />} />
+        <Route path="/teams" element={<Teams />} />
         <Route path="/teamSubmission/:id" element={<TeamSubmission />} />
         <Route path="/leaderBoard" element={<LeaderBoard />} />
         <Route path="/quizmasterSubmission" element={<QuizmasterSubmission />} />
