@@ -6,7 +6,7 @@ function Navigation() {
         <>
             <div>
                 <nav className="navbar" role="navigation" aria-label="main navigation">
-                    <div className="navbar-menu">
+                    <div className="navbar-menu is-active">
                         <Link to="/" className="navbar-item">
                             Team Registration
                         </Link>

@@ -69,14 +69,17 @@ function QuizmasterSubmission() {
               Questions
             </Link>
             <br />
+            {/* need to direct to HandOut page: */}
             <Link to="/" className="navbar-item column">
               Handout
             </Link>
             <br />
+            {/* need to direct to ScoreBoard page: */}
             <Link to="/" className="navbar-item column">
               Scoreboard
             </Link>
             <br />
+            {/* need to direct to TeamRegistration page: */}
             <Link to="/" className="navbar-item column">
               Team Registration
             </Link>
@@ -204,6 +207,7 @@ function QuizmasterSubmission() {
           </p>
         </div>
 
+{/* this part moved to HandOut page already, need to get rid off later on: */}
         <div className="handout">
           <table>
             <thead>
@@ -411,6 +415,7 @@ function QuizmasterSubmission() {
           </table>
         </div>
 
+{/* this part moved to HandOut page already, need to get rid off later on: */}
         <div className="scoreboard">
           <div className="round1">
             <p><a href='/'>Round 1</a></p>
