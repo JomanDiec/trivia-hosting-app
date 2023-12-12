@@ -19,6 +19,9 @@ import TestAdmin01 from "./pages/testAdmin01";
 import TestQuestionList from "./pages/testQuestionList";
 import TestTeamReg from "./pages/testTeamReg";
 import TestAfterTeamReg from "./pages/testAfterTeamReg";
+import CardTest from "./pages/cardTest";
+import HandOut from "./pages/HandOut";
+import ScoreBoard from "./pages/ScoreBoard";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -40,6 +43,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/testQuestionList" element={<TestQuestionList />} />
         <Route path='/testTeamReg' element={<TestTeamReg />} />
         <Route path="/testAfterTeamReg/:id" element={<TestAfterTeamReg />} />
+        <Route path="/cardTest" element={<CardTest />} />
+        <Route path="/quizmasterSubmissionHandout" element={<HandOut />} />
+        <Route path="/quizmasterSubmissionScoreBoard" element={<ScoreBoard />} />
       </Routes>
     </BrowserRouter>
   // </React.StrictMode>
