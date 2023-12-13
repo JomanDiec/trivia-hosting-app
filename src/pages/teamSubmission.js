@@ -105,10 +105,10 @@ function TeamSubmission() {
             
             <div key={question.number} className={`${question.isActive ? "active":"hidden"}`}>
               <h2><b>Question {question.number}:</b></h2>
-                <form onSubmit={(e)=>handleSubmit(e, question.id)}>
-                  <p>{question.question}</p>
+                <p>{question.question}</p>
+                <form onSubmit={(e)=>handleSubmit(e, question.id)} visibility={'hidden'} className={`${question.submissionActive ? "active":"hidden"}`}>
                   <label for="answer">Answer: </label>
-                  <input type="text" name='answer' placeholder="Enter Your answer" onChange={handleChange} />
+                  <input visibility={'none'} type="text" name='answer' placeholder="Enter Your answer" onChange={handleChange}/>
                   <button type="submit">Submit</button>
                 </form>
               <>
@@ -117,7 +117,7 @@ function TeamSubmission() {
               ))}  */}
               </>  
               
-              <h2 style={{display:'none'}}><b>Answer: {question.answer}</b></h2> {/*change to how it is displayed in questionlist.js */}
+              <h2 visibility={'none'} className={`${question.answerActive ? "active":"hidden"}`}><b>Answer: {question.answer}</b></h2> {/*change to how it is displayed in questionlist.js */}
             <br/>
             </div>
             

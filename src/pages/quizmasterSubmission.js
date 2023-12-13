@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc} from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc} from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 import Navigation from './navigation.js';
@@ -6,11 +6,14 @@ import { useParams, Link } from "react-router-dom";
 
 function QuizmasterSubmission() {
   const [data, setData] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [team, setTeam] = useState([])
+  // const [questionData, setQuestionData] = useState([]);
 
   useEffect(() => {
       console.log("useEffect>OnSnapshot")
       const fetchData = async () => {
-          const snapshot = await getDocs(collection(db, "questions"));
+          const snapshot = await getDocs(collection(db, "questions"),orderBy("number", "asc"));
           const newData = snapshot.docs.map(doc => ({
               id: doc.id,
               ...doc.data(),
@@ -19,7 +22,8 @@ function QuizmasterSubmission() {
           setData(newData);
       }
       fetchData();
-  }, [])
+  }, []);
+
   const toggleActive = async (id) => {
       console.log(id)
       // update firestore data with id
@@ -35,7 +39,40 @@ function QuizmasterSubmission() {
       )
   }
 
-  const [questionData, setQuestionData] = useState([]);
+  const handleChange = async (questionId, selectedOption) => {
+    setSelected(selectedOption);
+    console.log(`Option selected:`, selectedOption.target.value, " for ", questionId);
+    
+    let answerActive;
+    let submissionActive;
+    if (selectedOption.target.value == "Hidden"){
+      answerActive = false;
+      submissionActive = false;
+    } else if (selectedOption.target.value == "Open Submission"){
+      answerActive = false;
+      submissionActive = true;
+    } else if (selectedOption.target.value == "Close Submission"){
+      answerActive = false;
+      submissionActive = false;
+    } else if (selectedOption.target.value == "Display Answer"){
+      answerActive = true;
+      submissionActive = false;
+    };
+    console.log("answer states ", answerActive, "submission state is ", submissionActive)
+    let item = data.find(item => item.id === questionId);
+    await updateDoc(doc(db, "questions", questionId), {
+        answerActive: answerActive ? true : false,
+        submissionActive: submissionActive ? true : false
+    });
+
+    setData( 
+      data
+      .map(item => item.id === questionId ? 
+          {...item, answerActive: answerActive, submissionActive: submissionActive, selectionState: selectedOption.target.value} : item)
+    )
+
+
+  };
 
   const loadData = useCallback(async () => {
     console.log("loadData")
@@ -49,14 +86,29 @@ function QuizmasterSubmission() {
             question: doc.data().question,
             answer: doc.data().answer
         }
-        setQuestionData(questionData => [...questionData, data]);
+        setData(questionData => [...questionData, data]);
     });
   }, []);
 
   useEffect(() => {
     console.log("useEffect running on quizmasterSubmission")
     loadData();
-}, [loadData])
+  }, [loadData])
+
+  // useEffect(() => {
+  //   console.log("useEffect>OnSnapshot")
+  //   const q = query(collection(db, "trivia"),orderBy("number", "asc"));
+  //   const unsub = onSnapshot(q, (querySnapshot) => {
+  //       console.log("query useeffect", { querySnapshot })
+  //       const data = []
+  //       querySnapshot.forEach((doc) => {
+  //           data.push({ id: doc.id, ...doc.data() })
+  //       });
+  //       setData(data);
+  //   })
+
+  //   return () => unsub(); // Cleanup on component unmount
+  // }, [])
 
   return (
     <>
@@ -98,7 +150,16 @@ function QuizmasterSubmission() {
             <tbody>
               
                 
-                {questionData.map((question)=> ( 
+                {data.map((question)=> {
+                  let optionSelect
+                  if (question.answerActive == false && question.submissionActive == false){
+                    optionSelect = "Hidden"
+                  } else if (question.answerActive == false && question.submissionActive == true){
+                    optionSelect = "Open Submission"
+                  } else if (question.answerActive == true && question.submissionActive == false){
+                    optionSelect = "Display Answer"
+                  }
+                  return( 
                 <>
                 <tr>
                 <td> 
@@ -112,8 +173,8 @@ function QuizmasterSubmission() {
 
                 <td>
                   {question.isActive ?
-                  <button onClick={() => toggleActive(question.id)}>Off</button> :
-                  <button onClick={() => toggleActive(question.id)}>On</button>
+                  <button onClick={() => toggleActive(question.id)}>Turn Off</button> :
+                  <button onClick={() => toggleActive(question.id)}>Turn On</button>
                   }
                 </td>
                  
@@ -121,19 +182,26 @@ function QuizmasterSubmission() {
                 <td>
                   <div class="field">
                     <p class="control">
-                      <span class="select">
-                        <select>
-                          <option selected>Hidden</option>
-                          <option>Open submission</option>
-                          <option>Close submission</option>
-                          <option>Display Answer</option>
+                      <span class="select" >
+                        <select onChange={(e)=>handleChange(question.id, e)}>
+                          <option value="Hidden" selected={optionSelect === "Hidden"}>Hidden</option>
+                          <option value="Open Submission" selected={optionSelect === "Open Submission"}> Open submission</option>
+                          <option value="Close Submission" selected={optionSelect === "Close Submission"}>Close submission</option>
+                          <option value="Display Answer" selected={optionSelect === "Display Answer"}>Display Answer</option>
                         </select>
+                        <p>answer State is: {question.answerActive ? "true" : "false"} </p>
+                        <p>submission State is: {question.submissionActive ? "true" : "false"} </p>
+                        <p>dropdown option selected: {optionSelect} </p>
                       </span>
                     </p>
                   </div>
                 </td>
                 </tr>
-                <table className="table is-bordered has-text-centered">
+
+          {/* {team.map((trivia)=> {
+            return(
+          <> */}
+          <table className="table is-bordered has-text-centered">
             <thead>
               <tr>
                 <th style={{ paddingRight: '40px' }}>Team</th>
@@ -144,7 +212,7 @@ function QuizmasterSubmission() {
             </thead>
             <tbody>
               <tr>
-                <td>Team1</td>
+                <td>Team1 </td>
                 <td>maybe</td>
                 <td>
                   <label className="checkbox">
@@ -187,8 +255,10 @@ function QuizmasterSubmission() {
               </tr>
             </tbody>
           </table>
+          {/* </> */}
+          {/* )})}; */}
                 </>
-                ))} 
+                )})}; 
               
               
             </tbody>
