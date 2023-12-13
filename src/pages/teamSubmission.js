@@ -31,7 +31,7 @@ function TeamSubmission() {
   useEffect(() => {
       console.log("useEffect - TestAfterTeamReg")
       const getTeamData = async () => {
-          await getDoc(doc(db, "trivia", id)).then((docData) => {
+          await getDoc(doc(db, "teams", id)).then((docData) => {
               if (docData.exists()) {
                   console.log("Document data:", docData.data());
                   // add id to docData
@@ -76,13 +76,13 @@ function TeamSubmission() {
       ...prevState,
       [name]: value,
     }));
-    console.log(event.target.name, ' handlchange ', event.target.value)
+    console.log(event.target.name, ' handlechange ', event.target.value)
   }
 
   const handleSubmit = async (event, questionId) => {
     console.log(id, "and", teamData.teamName)
     event.preventDefault()
-    const docRef = await updateDoc(doc(db,"trivia", id),{
+    const docRef = await updateDoc(doc(db,"teams", id),{
 
       [questionId]: teamData.answer,
     })
@@ -113,7 +113,7 @@ function TeamSubmission() {
                 </form>
               <>
               {/* {teamData.map((team)=> (
-                <h2 key={team.teamName}><b>Your Answer: </b></h2> displays submitted answer and actual answer when quizmasterswitches answer display
+                <h2 visibility={'none'} className={`${question.answerActive ? "active":"hidden"}`}><b>Your Answer: {question.answer}</b></h2>
               ))}  */}
               </>  
               

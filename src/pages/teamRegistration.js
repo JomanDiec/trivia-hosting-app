@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { db } from '../firebaseConfig.js';
-import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { doc, setDoc, addDoc, collection, increment, getCountFromServer } from "firebase/firestore";
 import Navigation from './navigation.js';
 
 function TeamRegistration() {
@@ -22,10 +22,14 @@ function TeamRegistration() {
   const handleSubmit = async (event) => {
     event.preventDefault()
     console.log("Submitted!!", teamData)
-    const docRef = await addDoc(collection(db, "trivia"), {
+    const teamColl = collection(db, "teams");
+    const collSize = await getCountFromServer(teamColl);
+    console.log('count: ', collSize.data().count);
+    const docRef = await addDoc(collection(db, "teams"), {
       teamName: teamData.teamName,
       prizeElgible: teamData.prizeElgible,
       hasQuizmaster: teamData.hasQuizmaster,
+      number: collSize.data().count + 1,
     })
     console.log("Document written with ID: ", docRef.id);
   }

@@ -7,22 +7,22 @@ import { useParams, Link } from "react-router-dom";
 function QuizmasterSubmission() {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [team, setTeam] = useState([])
+  const [teams, setTeam] = useState([])
   // const [questionData, setQuestionData] = useState([]);
 
-  useEffect(() => {
-      console.log("useEffect>OnSnapshot")
-      const fetchData = async () => {
-          const snapshot = await getDocs(collection(db, "questions"),orderBy("number", "asc"));
-          const newData = snapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data(),
-          }));
-          console.log({ newData })
-          setData(newData);
-      }
-      fetchData();
-  }, []);
+  // useEffect(() => {
+  //     console.log("useEffect>OnSnapshot")
+  //     const fetchData = async () => {
+  //         const snapshot = await getDocs(collection(db, "questions"),orderBy("number", "asc"));
+  //         const newData = snapshot.docs.map(doc => ({
+  //             id: doc.id,
+  //             ...doc.data(),
+  //         }));
+  //         console.log({ newData })
+  //         setData(newData);
+  //     }
+  //     fetchData();
+  // }, []);
 
   const toggleActive = async (id) => {
       console.log(id)
@@ -78,16 +78,23 @@ function QuizmasterSubmission() {
     console.log("loadData")
     const q = query(collection(db, "questions"),orderBy("number", "asc"));
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-        console.log(`${doc.data().number} => ${doc.data().question}`);
-        let data = {
-            id: doc.id,
-            number: doc.data().number,
-            question: doc.data().question,
-            answer: doc.data().answer
-        }
-        setData(questionData => [...questionData, data]);
-    });
+    const newData = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log({ newData })
+    setData(newData);
+    // querySnapshot.forEach((doc) => {
+    //     console.log(`${doc.data().number} => ${doc.data().question}`);
+    //     let data = {
+    //       id: doc.id,
+    //       number: doc.data().number,
+    //       question: doc.data().question,
+    //       answer: doc.data().answer,
+    //       isActive: doc.data().isActive,
+    //     }
+    //     setData(questionData => [...questionData, data]);
+    // });
   }, []);
 
   useEffect(() => {
@@ -95,20 +102,21 @@ function QuizmasterSubmission() {
     loadData();
   }, [loadData])
 
-  // useEffect(() => {
-  //   console.log("useEffect>OnSnapshot")
-  //   const q = query(collection(db, "trivia"),orderBy("number", "asc"));
-  //   const unsub = onSnapshot(q, (querySnapshot) => {
-  //       console.log("query useeffect", { querySnapshot })
-  //       const data = []
-  //       querySnapshot.forEach((doc) => {
-  //           data.push({ id: doc.id, ...doc.data() })
-  //       });
-  //       setData(data);
-  //   })
+  useEffect(() => {
+    console.log("useEffect>OnSnapshot")
+    const q = query(collection(db, "teams"),orderBy("number", "asc"));
+    const unsub = onSnapshot(q, (querySnapshot) => {
+        console.log("query useeffect", { querySnapshot })
+        const teamData = []
+        querySnapshot.forEach((doc) => {
+            teamData.push({ id: doc.id, ...doc.data() })
+        });
+        setTeam(teamData);
+    })
 
-  //   return () => unsub(); // Cleanup on component unmount
-  // }, [])
+    return () => unsub(); // Cleanup on component unmount
+  }, []);
+  console.log({teams})
 
   return (
     <>
@@ -200,23 +208,34 @@ function QuizmasterSubmission() {
                   </div>
                 </td>
                 </tr>
-
-          {/* {team.map((trivia)=> {
-            return(
-          <> */}
+                
+          
           <table className="table is-bordered has-text-centered">
             <thead>
               <tr>
+                <th style={{ paddingRight: '40px' }}>#</th>
                 <th style={{ paddingRight: '40px' }}>Team</th>
                 <th style={{ paddingRight: '40px' }}>Answer</th>
                 <th style={{ paddingRight: '40px' }}>Correct?</th>
                 <th style={{ paddingRight: '40px' }}>Points</th>
               </tr>
             </thead>
+            
+            
             <tbody>
+              {teams.map((team)=> {
+                // console.log({team})
+                let answer
+                Object.keys(team).forEach(key => {
+                console.log(key, team[key]);
+                console.log(question.id)
+                });
+                return(
+                <>
               <tr>
-                <td>Team1 </td>
-                <td>maybe</td>
+              <td> {team.number} </td>
+                <td> {team.teamName} </td>
+                <td>{team[question.id]}</td>
                 <td>
                   <label className="checkbox">
                     <input type='checkbox' />
@@ -228,40 +247,13 @@ function QuizmasterSubmission() {
                   </label>
                 </td>
               </tr>
-              <tr>
-                <td>Team2</td>
-                <td>yes</td>
-                <td>
-                  <label className="checkbox">
-                    <input type='checkbox' />
-                  </label>
-                </td>
-                <td>
-                  <label className="points">
-                    <input type='number' style={{ width: '40px' }} />
-                  </label>
-                </td>
-              </tr>
-              <tr>
-                <td>Team3</td>
-                <td>no</td>
-                <td>
-                  <label className="checkbox">
-                    <input type='checkbox' />
-                  </label>
-                </td>
-                <td>
-                  <label className="points">
-                    <input type='number' style={{ width: '40px' }} />
-                  </label>
-                </td>
-              </tr>
+              </> 
+           )})}
+             
             </tbody>
           </table>
-          {/* </> */}
-          {/* )})}; */}
                 </>
-                )})}; 
+                )})}
               
               
             </tbody>
