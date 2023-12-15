@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../firebaseConfig.js';
 import { doc, setDoc, addDoc, collection, increment, getCountFromServer } from "firebase/firestore";
 import Navigation from './navigation.js';
+import { useNavigate } from 'react-router-dom';
 
 function TeamRegistration() {
   const [teamData, setTeamData] = useState({
@@ -9,6 +10,19 @@ function TeamRegistration() {
     prizeElgible: "competitive",
     hasQuizmaster: "no",
   });
+
+  const [teamId, setTeamId] = useState('');
+
+  const [joinTeamNumber, setJoinTeamNumber] = useState('');
+
+  const generateRandomNumber = () => {
+    return Math.floor(Math.random()*9000) + 1000;
+  }
+
+  useEffect(() => {
+    const teamId = generateRandomNumber();
+    setTeamId(teamId);
+  }, []);
 
   const handleChange = (event) => {
     console.log(event.target.name, event.target.value);
@@ -19,6 +33,10 @@ function TeamRegistration() {
     }));
   }
 
+  const handleJoinTeamChange = (event) => {
+    setJoinTeamNumber(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     console.log("Submitted!!", teamData)
@@ -26,13 +44,25 @@ function TeamRegistration() {
     const collSize = await getCountFromServer(teamColl);
     console.log('count: ', collSize.data().count);
     const docRef = await addDoc(collection(db, "teams"), {
+      teamId: teamId,
       teamName: teamData.teamName,
       prizeElgible: teamData.prizeElgible,
       hasQuizmaster: teamData.hasQuizmaster,
       number: collSize.data().count + 1,
     })
     console.log("Document written with ID: ", docRef.id);
+    console.log("Team registered with ID: ", teamId);
   }
+
+  const navigate = useNavigate();
+
+  const handleRegisterTeamClick = () => {
+    navigate(`/teamSubmission/${teamId}`);
+  };
+
+  const handleSubmitClick = () => {
+    navigate(`/teamSubmission/${joinTeamNumber}`);
+  };
 
   return (
     <>
@@ -43,10 +73,10 @@ function TeamRegistration() {
           {/* {teamData.teamName} */}
           <h3><u>Join Team</u></h3>
           <form>
-            <input className='input' type="text" name='team-number' id="team-number" placeholder="Enter Team Number" />
+            <input className='input' type="text" name='team-number' id="team-number" placeholder="Enter Team Number" value={joinTeamNumber} onChange={handleJoinTeamChange}/>
             <p></p>
             <div className='container is-flex is-justify-content-center'>
-              <button type="submit" className="button is-link">Submit</button>
+              <button type="submit" className="button is-link" onClick={handleSubmitClick}>Submit</button>
             </div>
           </form>
         </div>
@@ -93,7 +123,7 @@ function TeamRegistration() {
             </div>
             <p></p>
             <div className='container is-flex is-justify-content-center'>
-              <button type="submit" className="button is-link">Register Team</button>
+              <button type="submit" className="button is-link" onClick={handleRegisterTeamClick}>Register Team</button>
             </div>
           </form>
         </div>
