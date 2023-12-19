@@ -76,18 +76,19 @@ function TeamSubmission() {
       ...prevState,
       [name]: value,
     }));
-    console.log(event.target.name, ' handlechange ', event.target.value)
+    console.log(name, ' handlechange ', teamData)
   }
 
   const handleSubmit = async (event, questionId) => {
     console.log(id, "and", teamData.teamName)
     event.preventDefault()
     const docRef = await updateDoc(doc(db,"teams", id),{
-
-      [questionId]: teamData.answer,
+      [questionId]: {
+        answer: teamData.answer,
+      }
     })
-    console.log("Submitted!!", id, "and ", teamData.answer-questionId)
-    console.log("Document written with ID: ", docRef);
+    console.log("Submitted!!", id, "and ", teamData)
+    console.log("Document written with ID: ", {docRef});
   }
 
     return (
