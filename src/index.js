@@ -23,6 +23,7 @@ import TestAfterTeamReg from "./pages/testAfterTeamReg";
 import CardTest from "./pages/cardTest";
 import HandOut from "./pages/HandOut";
 import ScoreBoard from "./pages/ScoreBoard";
+import Questions from "./pages/questions";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -46,6 +47,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path='/testTeamReg' element={<TestTeamReg />} />
         <Route path="/testAfterTeamReg/:id" element={<TestAfterTeamReg />} />
         <Route path="/cardTest" element={<CardTest />} />
+        <Route path="/quizmasterSubmissionQuestions" element={<Questions />} />
         <Route path="/quizmasterSubmissionHandout" element={<HandOut />} />
         <Route path="/quizmasterSubmissionScoreBoard" element={<ScoreBoard />} />
       </Routes>
