@@ -7,7 +7,7 @@ import { useParams, Link } from "react-router-dom";
 function QuizmasterSubmission() {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [teams, setTeam] = useState([])
+  const [teams, setTeams] = useState([])
   // const [questionData, setQuestionData] = useState([]);
 
   // useEffect(() => {
@@ -70,9 +70,51 @@ function QuizmasterSubmission() {
       .map(item => item.id === questionId ? 
           {...item, answerActive: answerActive, submissionActive: submissionActive, selectionState: selectedOption.target.value} : item)
     )
-
-
   };
+
+  const pointChange = async (event, questionId, teamId) => {
+    console.log(questionId, teamId, event.target.value)
+      // add points to question in team
+      let item = teams.find(item => item.id === teamId);
+      console.log({ item })
+      let question = item[questionId]
+      console.log({ question })
+      question.points = event.target.value
+      console.log({ question })
+      await updateDoc(doc(db, "teams", teamId), {
+        [questionId]: question
+      });
+      setTeams(
+        teams
+          .map(item => item.id === teamId ?
+            { ...item, [questionId]: question } : item)
+      )
+    // let {name, value } = event.target;
+    // console.log(name, value);
+    // console.log('teams are (before) ', teams)
+    // setTeams(
+    //   teams.map(item => item.id === teamId ?
+    //     // console.log("found!! Team Name is ", item.teamName)
+    //     item.map(field => field.id === questionId ?
+    //       { ...field, [name]:value}
+    //       :field
+    //       )
+    //     :item
+    //   )
+    // )
+    // // setTeams(prevState => ({
+    // //   ...prevState,
+    // //   [teamId]:{
+    // //     [questionId]:{
+    // //       [name]: value,
+    // //       wackwacka: 'woop!!!'
+    // //     }
+    // //   }
+    // // }) 
+    // // );
+    console.log("afterteams ", teams)
+    // console.log(event.target.name, ' pointchange ', event.target.value)
+  }
 
   const loadData = useCallback(async () => {
     console.log("loadData")
@@ -111,12 +153,12 @@ function QuizmasterSubmission() {
         querySnapshot.forEach((doc) => {
             teamData.push({ id: doc.id, ...doc.data() })
         });
-        setTeam(teamData);
+        setTeams(teamData);
     })
 
     return () => unsub(); // Cleanup on component unmount
   }, []);
-  console.log({teams})
+  console.log('teams are: ', teams)
 
   return (
     <>
@@ -161,7 +203,7 @@ function QuizmasterSubmission() {
             <tbody>
               
                 
-                {data.map((question)=> {
+                {data.map((question, index)=> {
                   let optionSelect
                   if (question.answerActive == false && question.submissionActive == false){
                     optionSelect = "Hidden"
@@ -173,7 +215,7 @@ function QuizmasterSubmission() {
                   return( 
                 <>
                 <tr>
-                <td> 
+                <td key={index}> 
                 <div key={question.number}>
                   <a hre="/"><b>Question {question.number}:</b></a>
                       <p align="left">{question.question}</p>
@@ -200,9 +242,9 @@ function QuizmasterSubmission() {
                           <option value="Close Submission" selected={optionSelect === "Close Submission"}>Close submission</option>
                           <option value="Display Answer" selected={optionSelect === "Display Answer"}>Display Answer</option>
                         </select>
-                        <p>answer State is: {question.answerActive ? "true" : "false"} </p>
+                        {/* <p>answer State is: {question.answerActive ? "true" : "false"} </p>
                         <p>submission State is: {question.submissionActive ? "true" : "false"} </p>
-                        <p>dropdown option selected: {optionSelect} </p>
+                        <p>dropdown option selected: {optionSelect} </p> */}
                       </span>
                     </p>
                   </div>
@@ -224,18 +266,14 @@ function QuizmasterSubmission() {
             
             <tbody>
               {teams.map((team)=> {
-                // console.log({team})
-                let answer
-                Object.keys(team).forEach(key => {
-                console.log(key, team[key]);
-                console.log(question.id)
-                });
+                let {answer, points} = team[question.id] || ""
+                // console.log('key values are ',answer, points)
                 return(
                 <>
-              <tr>
+              <tr key={question.id}>
               <td> {team.number} </td>
                 <td> {team.teamName} </td>
-                <td>{team[question.id]}</td>
+                <td>{answer}</td>
                 <td>
                   <label className="checkbox">
                     <input type='checkbox' />
@@ -243,7 +281,13 @@ function QuizmasterSubmission() {
                 </td>
                 <td>
                   <label className="points">
-                    <input type='number' style={{ width: '40px' }} />
+                    <
+                    input type='number'
+                    name='points'
+                    style={{ width: '40px' }}
+                    value={points ? points : question.points}
+                    onChange={(e)=>pointChange(e, question.id, team.id)}
+                    />
                   </label>
                 </td>
               </tr>
