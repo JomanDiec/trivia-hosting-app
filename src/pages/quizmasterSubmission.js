@@ -8,7 +8,6 @@ function QuizmasterSubmission() {
   const [data, setData] = useState([]);
   const [selected, setSelected] = useState(null);
   const [teams, setTeams] = useState([])
-  const [teams, setTeams] = useState([])
   // const [questionData, setQuestionData] = useState([]);
 
   // useEffect(() => {
