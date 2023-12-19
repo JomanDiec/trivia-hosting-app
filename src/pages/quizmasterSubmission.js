@@ -287,6 +287,7 @@ function QuizmasterSubmission() {
                     style={{ width: '40px' }}
                     value={points ? points : question.points}
                     onChange={(e)=>pointChange(e, question.id, team.id)}
+                    disabled={answer ? false: true}
                     />
                   </label>
                 </td>
