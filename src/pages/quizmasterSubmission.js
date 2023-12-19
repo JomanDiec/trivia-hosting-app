@@ -276,7 +276,8 @@ function QuizmasterSubmission() {
                 <td>{answer}</td>
                 <td>
                   <label className="checkbox">
-                    <input type='checkbox' />
+                    <input type='checkbox'
+                    disabled={answer ? false: true} />
                   </label>
                 </td>
                 <td>
