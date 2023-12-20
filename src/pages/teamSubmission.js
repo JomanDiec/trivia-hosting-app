@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc} from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc, where} from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 import Navigation from './navigation.js';
@@ -92,6 +92,19 @@ function TeamSubmission() {
     console.log("Document written with ID: ", {docRef});
   }
 
+  useEffect(() => {
+    console.log("useEffect>OnSnapshot")
+    const documentRef = doc(db, 'teams', id);
+
+    const unsub = onSnapshot(documentRef, (docSnapshot) => {
+        console.log({ docSnapshot });
+        setTeamData({ id: docSnapshot.id, ...docSnapshot.data() });
+    });
+    return () => unsub(); // Cleanup on component unmount
+  }, []);
+
+  console.log('teamData is: ',teamData)
+
     return (
       <>
           <h1><u><b>Team Submission</b></u></h1>
@@ -103,8 +116,12 @@ function TeamSubmission() {
           <h1><b>Your Team's Room number is {} (share this with your teammates)</b></h1>
           <br/>
           <br/>
-          {data.map((question)=> (
-            
+          {data.map((question)=> {
+            // console.log('question is ', question)
+            // console.log('team data is: ', teamData)
+            let {answer, points, correct} = teamData[question.id] || ""
+            return(
+              <>
             <div key={question.number} className={`${question.isActive ? "active":"hidden"}`}>
               <h2><b>Question {question.number}:</b></h2>
                 <p>{question.question}</p>
@@ -114,17 +131,20 @@ function TeamSubmission() {
                   <button type="submit">Submit</button>
                 </form>
               <>
-              {/* {teamData.map((team)=> (
-                <h2 visibility={'none'} className={`${question.answerActive ? "active":"hidden"}`}><b>Your Answer: {question.answer}</b></h2>
-              ))}  */}
+              {/* {teamData.map((team)=> { */}
+                {/* return( */}
+                <>
+                <h2 visibility={'none'} className={`${question.answerActive ? "active":"hidden"}`}><b>Your Answer: {answer}</b></h2>
+                </>
+              {/* )})}  */}
               </>  
               
               <h2 visibility={'none'} className={`${question.answerActive ? "active":"hidden"}`}><b>Answer: {question.answer}</b></h2> {/*change to how it is displayed in questionlist.js */}
             <br/>
             </div>
             
-            
-          ))} 
+            </>
+          )})} 
           <p></p>
       </>
     );
