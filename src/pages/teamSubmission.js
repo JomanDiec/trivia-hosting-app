@@ -85,6 +85,7 @@ function TeamSubmission() {
     const docRef = await updateDoc(doc(db,"teams", id),{
       [questionId]: {
         answer: teamData.answer,
+        correct: false
       }
     })
     console.log("Submitted!!", id, "and ", teamData)

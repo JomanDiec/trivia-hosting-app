@@ -89,31 +89,30 @@ function QuizmasterSubmission() {
           .map(item => item.id === teamId ?
             { ...item, [questionId]: question } : item)
       )
-    // let {name, value } = event.target;
-    // console.log(name, value);
-    // console.log('teams are (before) ', teams)
-    // setTeams(
-    //   teams.map(item => item.id === teamId ?
-    //     // console.log("found!! Team Name is ", item.teamName)
-    //     item.map(field => field.id === questionId ?
-    //       { ...field, [name]:value}
-    //       :field
-    //       )
-    //     :item
-    //   )
-    // )
-    // // setTeams(prevState => ({
-    // //   ...prevState,
-    // //   [teamId]:{
-    // //     [questionId]:{
-    // //       [name]: value,
-    // //       wackwacka: 'woop!!!'
-    // //     }
-    // //   }
-    // // }) 
-    // // );
     console.log("afterteams ", teams)
     // console.log(event.target.name, ' pointchange ', event.target.value)
+  }
+
+  const correctChange = async (questionId, teamId) => {
+    let item = teams.find(item => item.id === teamId);
+    let question = item[questionId]
+    console.log(question)
+    let points = data.find(question => question.id === questionId);
+    question.points = points.points
+    question.correct = !question.correct
+    if (question.correct == false){
+      question.points = 0
+    }
+    await updateDoc(doc(db, "teams", teamId), {
+      [questionId]: question
+    });
+    setTeams(
+      teams
+        .map(item => item.id === teamId ?
+          { ...item, [questionId]: question } : item)
+    )
+    // question.points = 
+    // pointChange(event, questionId, teamId)
   }
 
   const loadData = useCallback(async () => {
@@ -266,7 +265,7 @@ function QuizmasterSubmission() {
             
             <tbody>
               {teams.map((team)=> {
-                let {answer, points} = team[question.id] || ""
+                let {answer, points, correct} = team[question.id] || ""
                 // console.log('key values are ',answer, points)
                 return(
                 <>
@@ -276,7 +275,11 @@ function QuizmasterSubmission() {
                 <td>{answer}</td>
                 <td>
                   <label className="checkbox">
-                    <input type='checkbox' />
+                    <input type='checkbox'
+                    checked={correct ? true : false}
+                    disabled={answer ? false: true}
+                    onClick={()=>correctChange(question.id, team.id)}
+                    />
                   </label>
                 </td>
                 <td>
@@ -287,7 +290,7 @@ function QuizmasterSubmission() {
                     style={{ width: '40px' }}
                     value={points ? points : question.points}
                     onChange={(e)=>pointChange(e, question.id, team.id)}
-                    disabled={answer ? false: true}
+                    disabled={correct ? false : true}
                     />
                   </label>
                 </td>
