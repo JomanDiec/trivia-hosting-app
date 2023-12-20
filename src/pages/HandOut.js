@@ -1,8 +1,11 @@
 import React from 'react';
+import NavComponent from "./navComponent";
 
 function HandOut() {
     return (
         <>
+            <NavComponent />
+            <br />
             <div className="handout">
                 <table>
                     <thead>

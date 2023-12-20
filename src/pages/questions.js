@@ -1,6 +1,10 @@
+import NavComponent from "./navComponent";
+
 function Questions() {
     return (
         <>
+            <NavComponent />
+            <br />
             <div className="questions">
                 <table>
                     <thead>

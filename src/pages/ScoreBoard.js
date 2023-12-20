@@ -1,8 +1,11 @@
 import * as React from "react";
+import NavComponent from "./navComponent";
 
 function ScoreBoard() {
     return (
         <>
+            <NavComponent />
+            <br />
             <div className="scoreboard">
                 <div className="round1">
                     <p><a href='/'>Round 1</a></p>
