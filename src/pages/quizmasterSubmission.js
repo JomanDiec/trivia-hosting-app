@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 import Navigation from './navigation.js';
 import { useParams, Link } from "react-router-dom";
+import NavComponent from "./navComponent.js";
 
 function QuizmasterSubmission() {
   const [data, setData] = useState([]);
@@ -163,31 +164,8 @@ function QuizmasterSubmission() {
     <>
       <h1>Quizmaster Submission</h1>
       <br />
-      <div>
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-menu colums">
-            <Link to="/" className="navbar-item column">
-              Questions
-            </Link>
-            <br />
-            {/* need to direct to HandOut page: */}
-            <Link to="/" className="navbar-item column">
-              Handout
-            </Link>
-            <br />
-            {/* need to direct to ScoreBoard page: */}
-            <Link to="/" className="navbar-item column">
-              Scoreboard
-            </Link>
-            <br />
-            {/* need to direct to TeamRegistration page: */}
-            <Link to="/" className="navbar-item column">
-              Team Registration
-            </Link>
-          </div>
-        </nav>
-      </div>
-
+      <NavComponent />
+      <br />
       {/* need to change size of the table container or find another way: */}
       <div className="d-flex justify-content-center">
         <div className="questions">

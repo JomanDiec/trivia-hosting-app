@@ -67,6 +67,7 @@ function TeamRegistration() {
   return (
     <>
       <Navigation />
+      <br />
       <div className='columns is-centered'>
         <div className='column is-three-fifths'>
           <h1>Team Registration</h1>

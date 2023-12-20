@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./index.css";
 import App from "./App";
+import NavComponent from "./pages/navComponent";
 import TeamRegistration from "./pages/teamRegistration";
 import Teams from "./pages/teams";
 import TeamSubmission from "./pages/teamSubmission";
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter basename="/">
       <Routes>
         {/* <Route path="/" element={<App />} /> */}
+        <Route path="/navComponent" element={<NavComponent />} />
         <Route path="/" element={<TeamRegistration />} />
         <Route path="/teams" element={<Teams />} />
         <Route path="/teamSubmission/:id" element={<TeamSubmission />} />
