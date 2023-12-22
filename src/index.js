@@ -25,10 +25,14 @@ import CardTest from "./pages/cardTest";
 import HandOut from "./pages/HandOut";
 import ScoreBoard from "./pages/ScoreBoard";
 import Questions from "./pages/questions";
+import AdminNav from "./components/AdminNav";
+import Navbar from "./components/Navbar";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
     <BrowserRouter basename="/">
+      <AdminNav />
+      <Navbar />
       <Routes>
         {/* <Route path="/" element={<App />} /> */}
         <Route path="/navComponent" element={<NavComponent />} />
