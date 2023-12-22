@@ -9,6 +9,7 @@ import TeamRegistration from "./pages/teamRegistration";
 import Teams from "./pages/teams";
 import TeamSubmission from "./pages/teamSubmission";
 import LeaderBoard from "./pages/leaderBoard";
+import QuizmasterRegistration from "./pages/quizmasterRegistration";
 import QuizmasterSubmission from "./pages/quizmasterSubmission";
 import AdminSubmission from "./pages/quizmasterAdmin";
 import QuizCreation from "./pages/quizCreation";
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/teams" element={<Teams />} />
         <Route path="/teamSubmission/:id" element={<TeamSubmission />} />
         <Route path="/leaderBoard" element={<LeaderBoard />} />
+        <Route path="/quizmasterRegistration" element={<QuizmasterRegistration />} />
         <Route path="/quizmasterSubmission" element={<QuizmasterSubmission />} />
         <Route path="/adminSubmission" element={<AdminSubmission />} />
         <Route path="/quizCreation" element={<QuizCreation />} />

@@ -95,11 +95,11 @@ function TeamRegistration() {
             <br />
             <div className='control'>
               <label className='radio' htmlFor="competitive">
-                <input type="radio" id="competitive" name="prizeElgible" value="competitive" defaultChecked="checked" onChange={handleChange} />
+                <input type="radio" id="competitive" name="prizeElgible" value="true" defaultChecked="checked" onChange={handleChange} />
                 <span className="ml-1">Elgible for prize (Max 5 Players per team)</span>
               </label>
               <br />
-              <label className='radio' htmlFor="casual">
+              <label className='radio' htmlFor="false">
                 <input type="radio" id="casual" name="prizeElgible" value="casual" onChange={handleChange} />
                 <span className="ml-1">Not elgible (more than 5 players, online team)</span>
               </label>
