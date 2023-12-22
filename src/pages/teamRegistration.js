@@ -6,16 +6,14 @@ import { useNavigate } from 'react-router-dom';
 
 function TeamRegistration() {
   const [teamData, setTeamData] = useState({
-    teamName: "",
-    prizeElgible: "competitive",
-    hasQuizmaster: "no",
+    // teamName: "",
+    // prizeElgible: true,
+    // hasQuizmaster: false,
   });
   
   const [teamId, setTeamId] = useState('');
 
   const [joinTeamNumber, setJoinTeamNumber] = useState('');
-
-  const [boolean, setBoolean] = useState(false);
 
   const navigate = useNavigate();
   const generateRandomNumber = () => {
@@ -29,23 +27,20 @@ function TeamRegistration() {
 
   const handleChange = (event) => {
     // console.log(event.target.name, event.target.value);
-    const { name, value } = event.target;
+    let { name, value } = event.target;
+    if (name != 'teamName'){
+        if (value == 'true') {
+        value = true
+      } else if (value == 'false') {
+        value = false
+      }
+    };
     setTeamData(prevState => ({
       ...prevState,
       [name]: value,
     }));
-    // console.log(name, " is now ", boolean)
+    console.log(name, " is now ", value)
   }
-
-  const booleanChange = (event) => {
-    setBoolean(event.target.value === 'true');
-    const { name } = event.target;
-    setTeamData(prevState => ({
-      ...prevState,
-      [name]: boolean
-    }))
-    console.log(name, " is now ", boolean)
-  };
 
   const handleJoinTeamChange = (event) => {
     setJoinTeamNumber(event.target.value);
@@ -70,7 +65,7 @@ function TeamRegistration() {
     })
     console.log("Document written with ID: ", docRef.id);
     console.log("Team registered with ID: ", teamId);
-    navigate(`/teamSubmission/${teamId}`);
+    // navigate(`/teamSubmission/${teamId}`);
   }
 
   
@@ -122,10 +117,10 @@ function TeamRegistration() {
                 <input type="radio" 
                 id="competitive" 
                 name="prizeElgible" 
-                value="false"
+                value="true"
                 defaultChecked="checked"
                 // checked={boolean === true}
-                onChange={booleanChange} />
+                onChange={handleChange} />
                 <span className="ml-1">Elgible for prize (Max 5 Players per team)</span>
               </label>
               <br />
@@ -133,9 +128,9 @@ function TeamRegistration() {
                 <input type="radio" 
                 id="casual" s
                 name="prizeElgible" 
-                value="true"
+                value="false"
                 // checked={boolean === false}
-                onChange={booleanChange}/>
+                onChange={handleChange}/>
                 <span className="ml-1">Not elgible (more than 5 players, online team)</span>
               </label>
             </div>
@@ -151,7 +146,7 @@ function TeamRegistration() {
                   name="hasQuizmaster" 
                   value="false" 
                   defaultChecked="checked" 
-                  onChange={booleanChange} />
+                  onChange={handleChange} />
                   <span className="ml-1">No</span>
                 </label>
               </div>
@@ -161,7 +156,7 @@ function TeamRegistration() {
                   id="yes" 
                   name="hasQuizmaster" 
                   value="true" 
-                  onChange={booleanChange} />
+                  onChange={handleChange} />
                   <span className="ml-1">Yes</span>
                 </label>
               </div>
