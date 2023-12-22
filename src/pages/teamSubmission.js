@@ -109,7 +109,7 @@ function TeamSubmission() {
       <>
           <h1><u><b>Team Submission</b></u></h1>
           <br/>
-          <Navigation />
+          {/* <Navigation /> */}
           <br/>
           <br/>
           <h1><b>Submission page for {}</b></h1>
