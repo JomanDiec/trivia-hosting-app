@@ -52,6 +52,7 @@ function TeamRegistration() {
     })
     console.log("Document written with ID: ", docRef.id);
     console.log("Team registered with ID: ", teamId);
+    navigate(`/teamSubmission/${teamId}`);
   }
 
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ function TeamRegistration() {
             </div>
             <p></p>
             <div className='container is-flex is-justify-content-center'>
-              <button type="submit" className="button is-link" onClick={handleRegisterTeamClick}>Register Team</button>
+              <button type="submit" className="button is-link" onClick={handleSubmit}>Register Team</button>
             </div>
           </form>
         </div>
