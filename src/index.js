@@ -27,6 +27,7 @@ import ScoreBoard from "./pages/ScoreBoard";
 import Questions from "./pages/questions";
 import AdminNav from "./components/AdminNav";
 import Navbar from "./components/Navbar";
+import BM_Form from "./pages/_bm_form";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -56,6 +57,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/quizmasterSubmissionQuestions" element={<Questions />} />
         <Route path="/quizmasterSubmissionHandout" element={<HandOut />} />
         <Route path="/quizmasterSubmissionScoreBoard" element={<ScoreBoard />} />
+
+        {/* TESTING */}
+        <Route path="/_bm_form" element={<BM_Form />} />
       </Routes>
     </BrowserRouter>
   // </React.StrictMode>
