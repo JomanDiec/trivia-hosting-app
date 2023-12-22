@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebaseConfig.js';
-import { doc, setDoc, addDoc, collection, increment, getCountFromServer } from "firebase/firestore";
+import { query, doc, setDoc, addDoc, collection, increment, getCountFromServer, getDocs, getDoc, updateDoc } from "firebase/firestore";
 import Navigation from './navigation.js';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,11 +10,14 @@ function TeamRegistration() {
     prizeElgible: "competitive",
     hasQuizmaster: "no",
   });
-
+  
   const [teamId, setTeamId] = useState('');
 
   const [joinTeamNumber, setJoinTeamNumber] = useState('');
 
+  const [boolean, setBoolean] = useState(false);
+
+  const navigate = useNavigate();
   const generateRandomNumber = () => {
     return Math.floor(Math.random()*9000) + 1000;
   }
@@ -25,13 +28,24 @@ function TeamRegistration() {
   }, []);
 
   const handleChange = (event) => {
-    console.log(event.target.name, event.target.value);
+    // console.log(event.target.name, event.target.value);
     const { name, value } = event.target;
     setTeamData(prevState => ({
       ...prevState,
       [name]: value,
     }));
+    // console.log(name, " is now ", boolean)
   }
+
+  const booleanChange = (event) => {
+    setBoolean(event.target.value === 'true');
+    const { name } = event.target;
+    setTeamData(prevState => ({
+      ...prevState,
+      [name]: boolean
+    }))
+    console.log(name, " is now ", boolean)
+  };
 
   const handleJoinTeamChange = (event) => {
     setJoinTeamNumber(event.target.value);
@@ -40,22 +54,26 @@ function TeamRegistration() {
   const handleSubmit = async (event) => {
     event.preventDefault()
     console.log("Submitted!!", teamData)
-    const teamColl = collection(db, "teams");
-    const collSize = await getCountFromServer(teamColl);
-    console.log('count: ', collSize.data().count);
+    // const teamColl = collection(db, "teams");
+    const sizeQuery = doc(db, "admin", "gameVariables");
+    const collSize = await getDoc(sizeQuery)
+    console.log('count: ', collSize.data().teamsCreated);
     const docRef = await addDoc(collection(db, "teams"), {
       teamId: teamId,
       teamName: teamData.teamName,
       prizeElgible: teamData.prizeElgible,
       hasQuizmaster: teamData.hasQuizmaster,
-      number: collSize.data().count + 1,
+      number: collSize.data().teamsCreated + 1,
+    })
+    await updateDoc(doc(db, "admin", "gameVariables"), {
+      teamsCreated: increment(1)
     })
     console.log("Document written with ID: ", docRef.id);
     console.log("Team registered with ID: ", teamId);
     navigate(`/teamSubmission/${teamId}`);
   }
 
-  const navigate = useNavigate();
+  
 
   const handleRegisterTeamClick = () => {
     navigate(`/teamSubmission/${teamId}`);
@@ -92,16 +110,32 @@ function TeamRegistration() {
         <div className='column is-three-fifths'>
           <h3><u>Register Team</u></h3>
           <form onSubmit={handleSubmit}>
-            <input className='input' type="text" name='teamName' id="teamName" placeholder="Team Name" onChange={handleChange} />
+            <input className='input' 
+            type="text"
+            name='teamName' 
+            id="teamName" 
+            placeholder="Team Name" 
+            onChange={handleChange} />
             <br />
             <div className='control'>
               <label className='radio' htmlFor="competitive">
-                <input type="radio" id="competitive" name="prizeElgible" value="true" defaultChecked="checked" onChange={handleChange} />
+                <input type="radio" 
+                id="competitive" 
+                name="prizeElgible" 
+                value="false"
+                defaultChecked="checked"
+                // checked={boolean === true}
+                onChange={booleanChange} />
                 <span className="ml-1">Elgible for prize (Max 5 Players per team)</span>
               </label>
               <br />
-              <label className='radio' htmlFor="false">
-                <input type="radio" id="casual" name="prizeElgible" value="casual" onChange={handleChange} />
+              <label className='radio' htmlFor="casual">
+                <input type="radio" 
+                id="casual" s
+                name="prizeElgible" 
+                value="true"
+                // checked={boolean === false}
+                onChange={booleanChange}/>
                 <span className="ml-1">Not elgible (more than 5 players, online team)</span>
               </label>
             </div>
@@ -112,13 +146,22 @@ function TeamRegistration() {
             <div className="level">
               <div className="level-left">
                 <label htmlFor="no">
-                  <input type="radio" id="no" name="hasQuizmaster" value="no" defaultChecked="checked" onChange={handleChange} />
+                  <input type="radio" 
+                  id="no" 
+                  name="hasQuizmaster" 
+                  value="false" 
+                  defaultChecked="checked" 
+                  onChange={booleanChange} />
                   <span className="ml-1">No</span>
                 </label>
               </div>
               <div className="level-right">
                 <label htmlFor="yes">
-                  <input type="radio" id="yes" name="hasQuizmaster" value="yes" onChange={handleChange} />
+                  <input type="radio" 
+                  id="yes" 
+                  name="hasQuizmaster" 
+                  value="true" 
+                  onChange={booleanChange} />
                   <span className="ml-1">Yes</span>
                 </label>
               </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NavComponent from "./navComponent.js"
-import { collection, onSnapshot, orderBy, query } from "@firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from "@firebase/firestore";
 import { db } from "../firebaseConfig.js";
 
 function QuizmasterRegistration() {
@@ -22,7 +22,16 @@ function QuizmasterRegistration() {
     }, []);
 
     const teamDelete = async (teamId) => {
+        await deleteDoc(doc(db, "teams", teamId ));
         console.log('deleting team ', teamId)
+    }
+
+    const openEdit = (event, teamId) => {
+    // setTeams(prevState => ({
+    //     ...prevState,
+    //     openEdit: true,
+    // }));
+    // console.log('Edit opened for ', teamId )
     }
 
     return(
@@ -53,8 +62,8 @@ function QuizmasterRegistration() {
                 <>
                 <tr key={team.number}>
                 <td>{team.number}. </td>
-                <td><input defaultValue={team.teamName} /></td>
-                <td><button>Edit</button></td>
+                <td className={`${team.prizeElgible ? "" : "red" }`}>{team.teamName}{team.hasQuizmaster ? " -Q" : "" }</td>
+                <td><button onClick={(e) => openEdit(team.id)}>Edit</button></td>
                 <td><button onClick={() => teamDelete(team.id)}>Delete</button></td>
                 </tr>
                 </>
