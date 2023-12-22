@@ -28,6 +28,7 @@ import Questions from "./pages/questions";
 import AdminNav from "./components/AdminNav";
 import Navbar from "./components/Navbar";
 import BM_Form from "./pages/_bm_form";
+import BM_Login from "./pages/_bm_login";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -60,6 +61,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
         {/* TESTING */}
         <Route path="/_bm_form" element={<BM_Form />} />
+        <Route path="/_bm_login" element={<BM_Login />} />
       </Routes>
     </BrowserRouter>
   // </React.StrictMode>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebaseConfig.js';
-import { doc, setDoc, addDoc, collection, increment, getCountFromServer } from "firebase/firestore";
+import { doc, setDoc, addDoc, collection, increment, getCountFromServer, getDoc } from "firebase/firestore";
 import Navigation from './navigation.js';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,16 +43,26 @@ function TeamRegistration() {
     const teamColl = collection(db, "teams");
     const collSize = await getCountFromServer(teamColl);
     console.log('count: ', collSize.data().count);
-    const docRef = await addDoc(collection(db, "teams"), {
-      teamId: teamId,
-      teamName: teamData.teamName,
-      prizeElgible: teamData.prizeElgible,
-      hasQuizmaster: teamData.hasQuizmaster,
-      number: collSize.data().count + 1,
-    })
-    console.log("Document written with ID: ", docRef.id);
-    console.log("Team registered with ID: ", teamId);
-    navigate(`/teamSubmission/${teamId}`);
+
+    const docRef = doc(db, "admin", "gameVariables");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+    
+    // const docRef = await addDoc(collection(db, "teams"), {
+    //   teamId: teamId,
+    //   teamName: teamData.teamName,
+    //   prizeElgible: teamData.prizeElgible,
+    //   hasQuizmaster: teamData.hasQuizmaster,
+    //   number: collSize.data().count + 1,
+    // })
+    // console.log("Document written with ID: ", docRef.id);
+    // console.log("Team registered with ID: ", teamId);
+    // navigate(`/teamSubmission/${teamId}`);
   }
 
   const navigate = useNavigate();
