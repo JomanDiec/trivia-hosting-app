@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 
 function TeamRegistration() {
   const [teamData, setTeamData] = useState({
-    // teamName: "",
-    // prizeElgible: true,
-    // hasQuizmaster: false,
+    teamName: "",
+    prizeElgible: true,
+    hasQuizmaster: false,
   });
   
   const [teamId, setTeamId] = useState('');
@@ -16,12 +16,14 @@ function TeamRegistration() {
   const [joinTeamNumber, setJoinTeamNumber] = useState('');
 
   const navigate = useNavigate();
+
+
   const generateRandomNumber = () => {
     return Math.floor(Math.random()*9000) + 1000;
   }
 
   useEffect(() => {
-    const teamId = generateRandomNumber();
+    const teamId = generateRandomNumber(); //need code to avoid assigning duplicate numbers to multiple teams
     setTeamId(teamId);
   }, []);
 
@@ -65,7 +67,7 @@ function TeamRegistration() {
     })
     console.log("Document written with ID: ", docRef.id);
     console.log("Team registered with ID: ", teamId);
-    // navigate(`/teamSubmission/${teamId}`);
+    navigate(`/teamSubmission/${docRef.id}`);
   }
 
   
@@ -126,7 +128,7 @@ function TeamRegistration() {
               <br />
               <label className='radio' htmlFor="casual">
                 <input type="radio" 
-                id="casual" s
+                id="casual"
                 name="prizeElgible" 
                 value="false"
                 // checked={boolean === false}

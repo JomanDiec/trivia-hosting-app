@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 
 function TeamSubmission() {
   const [teamData, setTeamData] = useState({
-    teamName: "joman123",
+    // teamName: "joman123",
   });
   const [questionData, setQuestionData] = useState([]);
   const { id } = useParams();
@@ -76,7 +76,7 @@ function TeamSubmission() {
       ...prevState,
       [name]: value,
     }));
-    console.log(name, ' handlechange ', teamData)
+    console.log(name, ' handlechange ', teamData.answer)
   }
 
   const handleSubmit = async (event, questionId) => {

@@ -24,6 +24,10 @@ function ScoreBoard() {
                                 <td style={{ padding: '5px' }}>Question9</td>
                                 <td style={{ padding: '5px' }}>Question10</td>
                                 <td style={{ padding: '5px' }}>Question11</td>
+                                <td style={{ padding: '5px' }}>Question12</td>
+                                <td style={{ padding: '5px' }}>Question13</td>
+                                <td style={{ padding: '5px' }}>Question14</td>
+                                <td style={{ padding: '5px' }}>Question15</td>
                                 <td style={{ padding: '5px' }}>Subtotal</td>
                             </tr>
                         </thead>

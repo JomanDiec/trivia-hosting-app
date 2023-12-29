@@ -26,13 +26,46 @@ function QuizmasterRegistration() {
         console.log('deleting team ', teamId)
     }
 
-    const openEdit = (event, teamId) => {
-    // setTeams(prevState => ({
-    //     ...prevState,
-    //     openEdit: true,
-    // }));
-    // console.log('Edit opened for ', teamId )
+    const openEdit = (teamId) => {
+        let team = teams.find(team => team.id === teamId);
+        if ('openEdit' in team){
+            team.openEdit = !team.openEdit
+            setTeams(
+                teams
+                    .map(team => team.id === teamId ?
+                    { ...team, openEdit: team.openEdit } : team)
+                )  
+        } else {
+            setTeams(
+                teams
+                    .map(team => team.id === teamId ?
+                    { ...team, openEdit: true } : team)
+                )    
+        }
+        
+    console.log('Edit opened for ', teamId, 'Edit state is ',team.openEdit )
     }
+
+    const handleChange = (event, teamId) => {
+        // console.log(event.target.name, event.target.value);
+        let { name, value } = event.target;
+        if (name != 'teamName'){
+            if (value == 'true') {
+            value = true
+          } else if (value == 'false') {
+            value = false
+          }
+        };
+        let team = teams.find(team => team.id === teamId);
+        setTeams(
+            teams
+              .map(team => team.id === teamId ?
+                { ...team, teamName: event.target.value } : team)
+            )
+        console.log(name, " is now ", value)
+      ;}
+
+      console.log('team Object: ', teams)
 
     return(
     <>
@@ -62,8 +95,17 @@ function QuizmasterRegistration() {
                 <>
                 <tr key={team.number}>
                 <td>{team.number}. </td>
-                <td className={`${team.prizeElgible ? "" : "red" }`}>{team.teamName}{team.hasQuizmaster ? " -Q" : "" }</td>
-                <td><button onClick={(e) => openEdit(team.id)}>Edit</button></td>
+                <td className={`${team.prizeElgible ? "" : "red" } ${team.openEdit ? "hidden" : "active" }`}>{team.teamName}{team.hasQuizmaster ? " -Q" : "" }</td>
+                <td style={{display:'block'}}>
+                    <input className='input' 
+                    type="text"
+                    name='teamName' 
+                    id="teamName" 
+                    value={team.teamName}
+                    onChange={(e)=>handleChange(e, team.id)}
+                    />
+                </td>
+                <td><button onClick={() => openEdit(team.id)}>{team.openEdit ? "Cancel" : "Edit"}</button></td>
                 <td><button onClick={() => teamDelete(team.id)}>Delete</button></td>
                 </tr>
                 </>
