@@ -10,7 +10,7 @@ function TeamRegistration() {
     prizeElgible: true,
     hasQuizmaster: false,
   });
-  
+
   const [teamId, setTeamId] = useState('');
 
   const [joinTeamNumber, setJoinTeamNumber] = useState('');
@@ -19,7 +19,7 @@ function TeamRegistration() {
 
 
   const generateRandomNumber = () => {
-    return Math.floor(Math.random()*9000) + 1000;
+    return Math.floor(Math.random() * 9000) + 1000;
   }
 
   useEffect(() => {
@@ -30,8 +30,8 @@ function TeamRegistration() {
   const handleChange = (event) => {
     // console.log(event.target.name, event.target.value);
     let { name, value } = event.target;
-    if (name != 'teamName'){
-        if (value == 'true') {
+    if (name != 'teamName') {
+      if (value == 'true') {
         value = true
       } else if (value == 'false') {
         value = false
@@ -70,7 +70,7 @@ function TeamRegistration() {
     navigate(`/teamSubmission/${docRef.id}`);
   }
 
-  
+
 
   const handleRegisterTeamClick = () => {
     navigate(`/teamSubmission/${teamId}`);
@@ -82,47 +82,63 @@ function TeamRegistration() {
 
   return (
     <>
+
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
       {/* <Navigation /> */}
       <br />
-      <div className='columns is-centered'>
-        <div className='column is-three-fifths'>
-          <h1>Team Registration</h1>
-          {/* {teamData.teamName} */}
-          <h3><u>Join Team</u></h3>
+      <div className="hero-body has-text-centered">
+        <div className="join">
+          <a class="button is-primary">
+            <span class="icon">
+              <i class="fas fa-users"></i>
+            </span>
+            <span>Join</span>
+          </a>
           <form>
-            <input className='input' type="text" name='team-number' id="team-number" placeholder="Enter Team Number" value={joinTeamNumber} onChange={handleJoinTeamChange}/>
+            <input className='input is-medium is-rounded' type="text" name='team-number' id="team-number" placeholder="Enter Team Number" autocomplete="team-number" required value={joinTeamNumber} onChange={handleJoinTeamChange} />
             <p></p>
             <div className='container is-flex is-justify-content-center'>
-              <button type="submit" className="button is-link" onClick={handleSubmitClick}>Submit</button>
+              <button type="submit" className="button is-fullwidth is-primary is-medium is-rounded" onClick={handleSubmitClick}>Submit</button>
             </div>
           </form>
         </div>
       </div>
 
       <div className="columns is-centered">
-        <h3>OR</h3>
+        <p class="control">
+          <span class="has-text-grey">OR</span>
+        </p>
       </div>
 
-      <div className='columns is-centered'>
-        <div className='column is-three-fifths'>
-          <h3><u>Register Team</u></h3>
+      <div className="hero-body has-text-centered">
+        <div className="register">
+          <a class="button is-primary">
+            <span class="icon">
+              <i class="fas fa-users-cog"></i>
+            </span>
+            <span>Register</span>
+          </a>
           <form onSubmit={handleSubmit}>
-            <input className='input' 
-            type="text"
-            name='teamName' 
-            id="teamName" 
-            placeholder="Team Name" 
-            onChange={handleChange} />
+            <input className='input is-medium is-rounded'
+              type="text"
+              name='teamName'
+              id="teamName"
+              placeholder="Team Name"
+              autocomplete="team-number"
+              required
+              onChange={handleChange} />
             <br />
             <div className='control'>
-              <label className='radio' htmlFor="competitive">
-                <input type="radio" 
-                id="competitive" 
-                name="prizeElgible" 
-                value="true"
-                defaultChecked="checked"
-                // checked={boolean === true}
-                onChange={handleChange} />
+              <label className='radio' htmlFor="competitive" style={{ marginRight: '20px' }}>
+                <input type="radio"
+                  id="competitive"
+                  name="prizeElgible"
+                  value="true"
+                  defaultChecked="checked"
+                  // checked={boolean === true}
+                  onChange={handleChange} />
                 <span className="ml-1">Elgible for prize (Max 5 Players per team)</span>
               </label>
               <br />
@@ -139,39 +155,36 @@ function TeamRegistration() {
             <br />
             <br />
             <div>Does your team have an O'Briens quizmaster?</div>
-
-            <div className="level">
-              <div className="level-left">
+            <div className="level is-mobile">
+              <div className="level-item">
                 <label htmlFor="no">
-                  <input type="radio" 
-                  id="no" 
-                  name="hasQuizmaster" 
-                  value="false" 
-                  defaultChecked="checked" 
-                  onChange={handleChange} />
+                  <input type="radio"
+                    id="no"
+                    name="hasQuizmaster"
+                    value="false"
+                    defaultChecked="checked"
+                    onChange={handleChange} />
                   <span className="ml-1">No</span>
                 </label>
               </div>
-              <div className="level-right">
+              <div className="level-item">
                 <label htmlFor="yes">
-                  <input type="radio" 
-                  id="yes" 
-                  name="hasQuizmaster" 
-                  value="true" 
-                  onChange={handleChange} />
+                  <input type="radio"
+                    id="yes"
+                    name="hasQuizmaster"
+                    value="true"
+                    onChange={handleChange} />
                   <span className="ml-1">Yes</span>
                 </label>
               </div>
             </div>
             <p></p>
             <div className='container is-flex is-justify-content-center'>
-              <button type="submit" className="button is-link" onClick={handleSubmit}>Register Team</button>
+              <button type="submit" className="button is-fullwidth is-primary is-medium is-rounded" onClick={handleSubmit}>Register Team</button>
             </div>
           </form>
         </div>
       </div>
-      {/* <input type="text" onChange={handleChange}/> */}
-      {/* <button onClick={button}>Click me</button> */}
     </>
   );
 }
