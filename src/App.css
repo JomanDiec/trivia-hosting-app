@@ -46,6 +46,13 @@
   visibility:hidden
 }
 
+.display{
+  display:block
+}
+.hide-display{
+  display:none
+}
+
 .red {
   color: red;
 }

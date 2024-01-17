@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NavComponent from "./navComponent.js"
-import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from "@firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, updateDoc } from "@firebase/firestore";
 import { db } from "../firebaseConfig.js";
 
 function QuizmasterRegistration() {
@@ -60,10 +60,30 @@ function QuizmasterRegistration() {
         setTeams(
             teams
               .map(team => team.id === teamId ?
-                { ...team, teamName: event.target.value } : team)
+                { ...team,
+                    [name]:value} : team)
             )
-        console.log(name, " is now ", value)
+        console.log(name, " is now ", value, teamId)
       ;}
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        console.log("Submitted!!", teams)
+        // const teamColl = collection(db, "teams");
+        const sizeQuery = doc(db, "admin", "gameVariables");
+        const collSize = await getDoc(sizeQuery)
+        console.log('count: ', collSize.data().teamsCreated);
+        const docRef = await addDoc(collection(db, "teams"), {
+          teamName: teams.teamName,
+        //   prizeElgible: teamData.prizeElgible,
+        //   hasQuizmaster: teamData.hasQuizmaster,
+        })
+        await updateDoc(doc(db, "admin", "gameVariables"), {
+        //   teamsCreated: increment(1)
+        })
+        console.log("Document written with ID: ", docRef.id);
+        // console.log("Team registered with ID: ", teamId);
+    }
 
       console.log('team Object: ', teams)
 
@@ -95,8 +115,8 @@ function QuizmasterRegistration() {
                 <>
                 <tr key={team.number}>
                 <td>{team.number}. </td>
-                <td className={`${team.prizeElgible ? "" : "red" } ${team.openEdit ? "hidden" : "active" }`}>{team.teamName}{team.hasQuizmaster ? " -Q" : "" }</td>
-                <td style={{display:'block'}}>
+                <td className={`${team.prizeElgible ? "" : "red" } ${team.openEdit ? "hide-display": "display"}`}>{team.teamName}{team.hasQuizmaster ? " -Q" : "" }</td>
+                <td className={`${team.openEdit ? "display": "hide-display"}`}>
                     <input className='input' 
                     type="text"
                     name='teamName' 
@@ -104,8 +124,64 @@ function QuizmasterRegistration() {
                     value={team.teamName}
                     onChange={(e)=>handleChange(e, team.id)}
                     />
+                    <div className="level-left"><b>Does the team have an O'Briens quizmaster?</b></div>
+                    <div className="level">
+                    <div className="level-left">
+                        <label htmlFor="no">
+                            <input type="radio" 
+                            id="no" 
+                            name="hasQuizmaster" 
+                            value="false" 
+                            defaultChecked="checked" 
+                            onChange={(e)=>handleChange(e, team.id)} />
+                            <span className="ml-1 mr-4">No</span>
+                        </label>
+                    {/* </div>
+                    <div className="level-left"> */}
+                        <label htmlFor="yes">
+                            <input type="radio" 
+                            id="yes" 
+                            name="hasQuizmaster" 
+                            value="true" 
+                            onChange={(e)=>handleChange(e, team.id)} />
+                            <span className="ml-1">Yes</span>
+                        </label>
+                    </div>
+                    </div>
+
+                    <div className="level-left"><b>Is the team elgible for prize money</b></div>
+                    <div className="level">
+                    <div className="level-left">
+                        <label htmlFor="no">
+                            <input type="radio" 
+                            id="no" 
+                            name="prizeElgible" 
+                            value="false" 
+                            defaultChecked="checked" 
+                            onChange={(e)=>handleChange(e, team.id)} />
+                            <span className="ml-1 mr-4">No</span>
+                        </label>
+                    {/* </div>
+                    <div className="level-left"> */}
+                        <label htmlFor="yes">
+                            <input type="radio" 
+                            id="yes" 
+                            name="prizeElgible" 
+                            value="true" 
+                            onChange={(e)=>handleChange(e, team.id)} />
+                            <span className="ml-1 mr-4">Yes</span>
+                        </label>
+                    </div>
+                    </div>
                 </td>
-                <td><button onClick={() => openEdit(team.id)}>{team.openEdit ? "Cancel" : "Edit"}</button></td>
+
+                <td>
+                    <div className="level">
+                    <button className={`${team.openEdit ? "display": "hide-display"}`} onClick={() => openEdit(team.id)}>Submit</button>
+                    <button onClick={() => openEdit(team.id)}>{team.openEdit ? "Cancel" : "Edit"}</button>
+                    </div>
+                   
+                </td>
                 <td><button onClick={() => teamDelete(team.id)}>Delete</button></td>
                 </tr>
                 </>
