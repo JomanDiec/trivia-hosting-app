@@ -133,7 +133,7 @@ function TeamSubmission() {
               </form> */}
               {/* testing code: */}
               {/* need to add destination for form autoupdate: */}
-              <form onSubmit={(e) => handleSubmit(e, question.id)} visibility={'hidden'}>
+              <form className={`${question.submissionActive ? "active" : "hidden"}`} onSubmit={(e) => handleSubmit(e, question.id)} visibility={'hidden'}>
                 <label for="answer">Answer: </label>
                 <input visibility={'none'} type="text" name='answer' placeholder="Enter Your answer" onChange={handleChange} />
                 <button type="submit">Submit</button>

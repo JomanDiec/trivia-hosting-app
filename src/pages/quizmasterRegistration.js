@@ -177,10 +177,9 @@ function QuizmasterRegistration() {
 
                 <td>
                     <div className="level">
-                    <button className={`${team.openEdit ? "display": "hide-display"}`} onClick={() => openEdit(team.id)}>Submit</button>
-                    <button onClick={() => openEdit(team.id)}>{team.openEdit ? "Cancel" : "Edit"}</button>
+                        <button className={`${team.openEdit ? "display": "hide-display"}`} onClick={() => openEdit(team.id)}>Submit</button>
+                        <button onClick={() => openEdit(team.id)}>{team.openEdit ? "Cancel" : "Edit"}</button>
                     </div>
-                   
                 </td>
                 <td><button onClick={() => teamDelete(team.id)}>Delete</button></td>
                 </tr>
